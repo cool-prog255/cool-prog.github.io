@@ -1,9 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<title>Google 登入按鈕示範</title>
+<title>Google 登入按鈕</title>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 body { font-family: Arial; text-align: center; margin-top: 60px; }
@@ -25,14 +24,11 @@ button:hover {
 <body>
 
 <h2>Google 登入按鈕示範</h2>
-
-<!-- 自訂按鈕 -->
 <button id="google-login-btn">使用 Google 登入</button>
-
 <div id="profile"></div>
 
 <script>
-const CLIENT_ID = "748226065324-j98190oau40mcgt6c91f5up6857ma8fj.apps.googleusercontent.com";
+const CLIENT_ID = "YOUR_CLIENT_ID_HERE"; // 替換成你的 Google Client ID
 
 // callback function
 function handleCredentialResponse(response) {
@@ -45,25 +41,21 @@ function handleCredentialResponse(response) {
         <p>Email：${payload.email}</p>
         <img src="${payload.picture}" width="80" />
     `;
-
     console.log("Google ID Token:", token);
 }
 
-// 初始化 Google 物件
-let googleAccounts;
+// 初始化 Google Identity Services
 window.onload = function() {
-    googleAccounts = google.accounts.id;
-};
-
-// 監聽按鈕點擊
-document.getElementById('google-login-btn').addEventListener('click', () => {
-    googleAccounts.initialize({
+    google.accounts.id.initialize({
         client_id: CLIENT_ID,
         callback: handleCredentialResponse,
         auto_select: false
     });
+};
 
-    googleAccounts.prompt(); // 顯示 One-Tap / popup 登入
+// 按鈕點擊觸發 popup 登入
+document.getElementById('google-login-btn').addEventListener('click', () => {
+    google.accounts.id.prompt(); // 彈出登入介面
 });
 </script>
 
