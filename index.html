@@ -24,13 +24,14 @@ button:hover {
 <body>
 
 <h2>Google 登入按鈕示範</h2>
+
 <button id="google-login-btn">使用 Google 登入</button>
 <div id="profile"></div>
 
 <script>
-const CLIENT_ID = "YOUR_CLIENT_ID_HERE"; // 替換成你的 Google Client ID
+const CLIENT_ID = "YOUR_CLIENT_ID_HERE"; // 請替換成你的 Google OAuth Client ID
 
-// callback function
+// 登入成功 callback
 function handleCredentialResponse(response) {
     const token = response.credential;
     const payload = JSON.parse(atob(token.split('.')[1]));
@@ -53,9 +54,13 @@ window.onload = function() {
     });
 };
 
-// 按鈕點擊觸發 popup 登入
+// 點按鈕觸發 popup 登入
 document.getElementById('google-login-btn').addEventListener('click', () => {
-    google.accounts.id.prompt(); // 彈出登入介面
+    google.accounts.id.prompt((notification) => {
+        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+            alert("無法顯示登入 popup，請確認 OAuth 網址設定是否正確");
+        }
+    });
 });
 </script>
 
